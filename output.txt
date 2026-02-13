@@ -1,0 +1,4 @@
+{"message":"OTP sent","loginSessionId":"vjrt1"}
+{"message":"OTP verified"}
+{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InlvdXJfZW1haWxAZ21haWwuY29tIiwic2Vzc2lvbklkIjoidmpydDEiLCJpYXQiOjE3NzA5OTIwNDMsImV4cCI6MTc3MDk5Mjk0M30.mFSydqi-V5aNTVgxsni65_90bILYO5nQOq0qaMYEE5U","expires_in":900}
+{"message":"Access granted","user":{"email":"your_email@gmail.com","sessionId":"vjrt1","iat":1770992043,"exp":1770992943},"success_flag":"FLAG-eW91cl9lbWFpbEBnbWFpbC5jb21fQ09NUExFVEVEX0FTU0lHTk1FTlQ="}
