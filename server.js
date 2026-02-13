@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const requestLogger = require("./middleware/logger");
 const authMiddleware = require("./middleware/auth");
 const { generateToken } = require("./utils/tokenGenerator");
+require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -49,7 +50,8 @@ app.post("/auth/login", (req, res) => {
     // Store OTP
     otpStore[loginSessionId] = otp;
 
-    console.log(`[OTP] Session ${loginSessionId} generated`);
+    console.log(`[OTP] Session ${loginSessionId} generated: ${otp}`);
+
 
     return res.status(200).json({
       message: "OTP sent",
@@ -109,38 +111,36 @@ app.post("/auth/verify-otp", (req, res) => {
 
 app.post("/auth/token", (req, res) => {
   try {
-    const token = req.headers.authorization;
+    const sessionToken = req.cookies.session_token;
 
-    if (!token) {
+    if (!sessionToken) {
       return res
         .status(401)
         .json({ error: "Unauthorized - valid session required" });
     }
 
-    const session = loginSessions[token.replace("Bearer ", "")];
+    const session = loginSessions[sessionToken];
 
     if (!session) {
       return res.status(401).json({ error: "Invalid session" });
     }
 
-    // Generate JWT
     const secret = process.env.JWT_SECRET || "default-secret-key";
 
     const accessToken = jwt.sign(
       {
         email: session.email,
-        sessionId: token,
+        sessionId: sessionToken,
       },
       secret,
-      {
-        expiresIn: "15m",
-      }
+      { expiresIn: "15m" }
     );
 
     return res.status(200).json({
       access_token: accessToken,
       expires_in: 900,
     });
+
   } catch (error) {
     return res.status(500).json({
       status: "error",
@@ -148,6 +148,7 @@ app.post("/auth/token", (req, res) => {
     });
   }
 });
+
 
 // Protected route example
 app.get("/protected", authMiddleware, (req, res) => {

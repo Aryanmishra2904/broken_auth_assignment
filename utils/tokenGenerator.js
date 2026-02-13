@@ -1,6 +1,3 @@
-const crypto = require("crypto");
-const { getSecretFromDB } = require("./mockDb");
-
 const generateToken = async (email) => {
   try {
     const secret = await getSecretFromDB();
@@ -9,10 +6,9 @@ const generateToken = async (email) => {
       .createHmac("sha256", secret)
       .update(email)
       .digest("base64");
+
   } catch (error) {
-    // THE BUG: Empty catch block.
-    // Error is swallowed and undefined is returned.
+    console.error("Token generation failed:", error.message);
+    throw error;   // ✅ DO NOT SWALLOW ERROR
   }
 };
-
-module.exports = { generateToken };
