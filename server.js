@@ -1,22 +1,19 @@
+require("dotenv").config();
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 const requestLogger = require("./middleware/logger");
 const authMiddleware = require("./middleware/auth");
-const { generateToken } = require("./utils/tokenGenerator");
-require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Session storage (in-memory)
 const loginSessions = {};
 const otpStore = {};
 
-// Middleware
 app.use(requestLogger);
 app.use(express.json());
-
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.json({
@@ -26,7 +23,6 @@ app.get("/", (req, res) => {
   });
 });
 
-// CHANGE 1: /auth/login endpoint
 app.post("/auth/login", (req, res) => {
   try {
     const { email, password } = req.body;
@@ -35,23 +31,22 @@ app.post("/auth/login", (req, res) => {
       return res.status(400).json({ error: "Email and password required" });
     }
 
-    // Generate session and OTP
-    const loginSessionId = Math.random().toString(36).substring(7);
-    const otp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
+    if (password !== "password123") {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
 
-    // Store session with 2-minute expiry
+    const loginSessionId = Math.random().toString(36).substring(7);
+    const otp = Math.floor(100000 + Math.random() * 900000);
+
     loginSessions[loginSessionId] = {
       email,
-      password,
       createdAt: Date.now(),
-      expiresAt: Date.now() + 2 * 60 * 1000, // 2 minutes
+      expiresAt: Date.now() + 2 * 60 * 1000,
     };
 
-    // Store OTP
     otpStore[loginSessionId] = otp;
 
     console.log(`[OTP] Session ${loginSessionId} generated: ${otp}`);
-
 
     return res.status(200).json({
       message: "OTP sent",
@@ -91,15 +86,13 @@ app.post("/auth/verify-otp", (req, res) => {
 
     res.cookie("session_token", loginSessionId, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 15 * 60 * 1000, // 15 minutes
+      maxAge: 15 * 60 * 1000,
     });
 
     delete otpStore[loginSessionId];
 
     return res.status(200).json({
       message: "OTP verified",
-      sessionId: loginSessionId,
     });
   } catch (error) {
     return res.status(500).json({
@@ -140,7 +133,6 @@ app.post("/auth/token", (req, res) => {
       access_token: accessToken,
       expires_in: 900,
     });
-
   } catch (error) {
     return res.status(500).json({
       status: "error",
@@ -149,13 +141,13 @@ app.post("/auth/token", (req, res) => {
   }
 });
 
-
-// Protected route example
 app.get("/protected", authMiddleware, (req, res) => {
   return res.json({
     message: "Access granted",
     user: req.user,
-    success_flag: `FLAG-${Buffer.from(req.user.email + "_COMPLETED_ASSIGNMENT").toString('base64')}`,
+    success_flag: `FLAG-${Buffer.from(
+      req.user.email + "_COMPLETED_ASSIGNMENT"
+    ).toString("base64")}`,
   });
 });
 
