@@ -1,4 +1,4 @@
-{"message":"OTP sent","loginSessionId":"vjrt1"}
+{"message":"OTP sent","loginSessionId":"rrsytr"}
 {"message":"OTP verified"}
-{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InlvdXJfZW1haWxAZ21haWwuY29tIiwic2Vzc2lvbklkIjoidmpydDEiLCJpYXQiOjE3NzA5OTIwNDMsImV4cCI6MTc3MDk5Mjk0M30.mFSydqi-V5aNTVgxsni65_90bILYO5nQOq0qaMYEE5U","expires_in":900}
-{"message":"Access granted","user":{"email":"your_email@gmail.com","sessionId":"vjrt1","iat":1770992043,"exp":1770992943},"success_flag":"FLAG-eW91cl9lbWFpbEBnbWFpbC5jb21fQ09NUExFVEVEX0FTU0lHTk1FTlQ="}
+{"access_token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFyeWFubi5taWlzaHJhQGdtYWlsLmNvbSIsInNlc3Npb25JZCI6InJyc3l0ciIsImlhdCI6MTc3MDk5MzI2OCwiZXhwIjoxNzcwOTk0MTY4fQ.iR2XdHC35UY3upk-B_MMrh6mNWVgiTk9HwMiaQHdp1k","expires_in":900}
+{"message":"Access granted","user":{"email":"aryann.miishra@gmail.com","sessionId":"rrsytr","iat":1770993268,"exp":1770994168},"success_flag":"FLAG-YXJ5YW5uLm1paXNocmFAZ21haWwuY29tX0NPTVBMRVRFRF9BU1NJR05NRU5U"}
